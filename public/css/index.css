@@ -39,3 +39,6 @@ body{
     font-weight: bold;
 }
 
+.crud-btn{
+    cursor: pointer;
+}

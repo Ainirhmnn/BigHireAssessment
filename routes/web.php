@@ -16,8 +16,10 @@ use App\Http\Controllers\ToDoListController;
 */
 
 Route::get('/', function () {
-    $lists = ToDoList::all();
+    $lists = ToDoList::where('status', 'A')->get();
     return view('index', ['lists' => $lists]);
 });
 
 Route::post('/create-list', [ToDoListController::class, 'create']);
+Route::put('/edit-list/{list}', [ToDoListController::class, 'edit']);
+Route::delete('/delete-list/{list}', [ToDoListController::class, 'delete']);

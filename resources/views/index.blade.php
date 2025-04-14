@@ -21,8 +21,7 @@
                     My To-Do List
                 </div>
                 <div class="add-list">
-                    
-                    <i class="fa-solid fa-circle-plus showCreateModal" style="color: white;" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                    <i class="fa-solid fa-circle-plus showCreateModal crud-btn" style="color: white;" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
                 </div>
             </div>
             <div class="list-body-card">
@@ -44,9 +43,8 @@
                                 </div>     
                             </div>
                             <div class="col-sm-2 checkbox text-end">
-                                <i class="fa-solid fa-pen-to-square"></i>
-
-                                <i class="fa-solid fa-trash-can"></i>
+                                <i class="fa-solid fa-pen-to-square crud-btn edit-list"  data-list='@json($list)'></i>
+                                <i class="fa-solid fa-trash-can crud-btn delete-list" data-list-id="{{$list->id}}"></i>
                             </div>
                         </div>
                     @endforeach
@@ -69,6 +67,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="list_id" name="list_id">
                     <div class="d-flex">
                         <div class="col-sm-3">
                             <label for="" class="todolist-title">Title</label>
@@ -119,37 +118,102 @@
                 $('#title').val('');
                 $('#desc').val('');
                 $('#due_date').val('');
+                $('#list_id').val('');
             });
 
             $('.create-list').on('click', function(){
+                var list_id = $('#list_id').val();
+                console.log(list_id);
                 var list_title = $('#title').val();
                 var list_desc = $('#desc').val();
                 var list_due_date = $('#due_date').val();
 
+                var url = '/create-list';
+                var method = 'POST';
+                if(list_id){
+                    url = '/edit-list/' + list_id;
+                    method = 'PUT';
+                }
                 if(list_title && list_desc && list_due_date){
-                    $.ajax({
-                        url: '/create-list',
-                        method: 'POST',
-                        data: {
-                            title: list_title,
-                            desc: list_desc,
-                            due_date: list_due_date
-                        },
-                        success: function(res) {
-                            alert('Saved!');
-                        },
-                        error: function(err) {
-                            console.log(err);
-                        }
-                    });
+                    var data = {
+                        title: list_title,
+                        desc: list_desc, 
+                        due_date: list_due_date
+                    };
+                    submitAjax(url,method,data);
+                    
                 }else{
                     Swal.fire({
-                        // title: "?",
-                        text: "Please Fill in All Fields!",
+                        title: "Mandatory Fields is Empty!",
+                        text: "Please Fill in All Required Fields!",
                         icon: "warning"
                     });
                 }
             });
+
+            $('.edit-list').on('click', function(){
+                let list = $(this).data('list');
+                var list_id = list.id;
+                var list_title = list.title;
+                var list_desc = list.desc;
+                var list_date = list.due_date;
+
+                $('#exampleModal').modal('show');
+                $('#list_id').val(list_id);
+                $('#title').val(list_title);
+                $('#desc').val(list_desc);
+                $('#due_date').val(list_date);
+            });
+
+            $('.delete-list').on('click', function(){
+                let list_id = $(this).data('list-id');
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var url = 'delete-list/' + list_id;
+                        submitAjax(url,'DELETE',[]);
+                    }
+                });
+            });
+
+            
+
+            function submitAjax(url, method, data){
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: data,
+                    success: function(res) {
+                        var title = res.title;
+                        var msg = res.message;
+                        if (res.success) {
+                            Swal.fire({
+                                title: title,
+                                text: msg,
+                                icon: "success",
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: title,
+                                text: msg,
+                                icon: "warning",
+                            });
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            }
         });
     </script>
 
