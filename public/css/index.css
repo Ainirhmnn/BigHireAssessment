@@ -1,0 +1,40 @@
+body{
+    background-color: #333;
+}
+
+.list-card{
+    background-color: white;
+    width: 50rem;
+    height: auto;
+    border: 0.1px solid black;
+    margin: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.list-header-card{
+    border: 0.1px solid black;
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    background-color: black;
+}
+
+.title{
+    color: white;
+    padding: 5px;
+}
+
+.add-list{
+    align-items: center;
+    float: right;
+    margin-right: 5px;
+}
+
+.list-body-card{
+    margin: 10px;
+}
+
+.todolist-title{
+    font-weight: bold;
+}
