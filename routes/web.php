@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\ToDoList;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ToDoListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    $lists = ToDoList::all();
+    return view('index', ['lists' => $lists]);
 });
+
+Route::post('/create-list', [ToDoListController::class, 'create']);
