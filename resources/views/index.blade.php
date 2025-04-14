@@ -44,29 +44,15 @@
                                 </div>     
                             </div>
                             <div class="col-sm-2 checkbox text-end">
+                                <i class="fa-solid fa-pen-to-square"></i>
+
                                 <i class="fa-solid fa-trash-can"></i>
                             </div>
                         </div>
                     @endforeach
                 @else
                     <div class="todolist-2 d-flex p-3">
-                        <div class="col-sm-1 text-center">
-                            <input type="checkbox" class="ml-3" name="todolist-2" id="todolist-1">
-                        </div>
-                        <div class="col-sm-9 checkbox-desc">
-                            <label for="" class="todolist-title">Wash laundry 90</label>
-                            <div class="d-flex">
-                                <div>
-                                    <i class="fa-solid fa-circle p-1" style="font-size: 5px;"></i>
-                                </div>
-                                <div class="pl-3">
-                                    need to be done immediately
-                                </div>
-                            </div>                    
-                            </div>
-                        <div class="col-sm-2 checkbox text-end">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </div>
+                        To-Do List Not Available!
                     </div>
                 @endif
             </div>
@@ -118,6 +104,7 @@
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script>
@@ -127,12 +114,18 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             })
+
+            $('#exampleModal').on('hidden.bs.modal', function () {
+                $('#title').val('');
+                $('#desc').val('');
+                $('#due_date').val('');
+            });
+
             $('.create-list').on('click', function(){
                 var list_title = $('#title').val();
                 var list_desc = $('#desc').val();
                 var list_due_date = $('#due_date').val();
 
-                console.log(list_due_date);
                 if(list_title && list_desc && list_due_date){
                     $.ajax({
                         url: '/create-list',
@@ -148,6 +141,12 @@
                         error: function(err) {
                             console.log(err);
                         }
+                    });
+                }else{
+                    Swal.fire({
+                        // title: "?",
+                        text: "Please Fill in All Fields!",
+                        icon: "warning"
                     });
                 }
             });
