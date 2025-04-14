@@ -28,19 +28,28 @@
                 @if (count($lists) > 0)
                     @foreach ($lists as $list)
                         <div class="todolist-{{$list['id']}} d-flex p-3">
+                            @php
+                                $overline_text = '';
+                                $checked = '';
+                                if ($list['is_completed'] == 'Y') {
+                                    $overline_text = 'overline_text';
+                                    $checked = 'checked';
+                                }
+                            @endphp
                             <div class="col-sm-1 text-center">
-                                <input type="checkbox" class="ml-3" name="todolist-{{$list['id']}}" id="todolist-{{$list['id']}}">
+                                <input type="checkbox" class="ml-3 todolist-checkbox" name="todolist-{{$list['id']}}" id="todolist-{{$list['id']}}" data-list-id="{{$list['id']}}" {{ $checked }}>
                             </div>
                             <div class="col-sm-9 checkbox-desc">
-                                <label for="" class="todolist-title">{{$list['title']}}</label>
-                                <div class="d-flex">
-                                    <div>
-                                        <i class="fa-solid fa-circle p-1" style="font-size: 5px;"></i>
+                                <label for="" class="todolist-title {{ $overline_text }}" data-list-id="{{$list['id']}}">{{$list['title']}}</label>
+                                <div class="d-flex text-muted todolist-title font-11">
+                                    <label for="">Due Date: </label>
+                                    <div class="pl-3"> &nbsp;
+                                        {{date('d M Y', strtotime($list['due_date']))}}
                                     </div>
-                                    <div class="pl-3">
-                                        {{$list['desc']}}
-                                    </div>
-                                </div>     
+                                </div>  
+                                <div class="pl-3">
+                                    {{$list['desc']}}
+                                </div>
                             </div>
                             <div class="col-sm-2 checkbox text-end">
                                 <i class="fa-solid fa-pen-to-square crud-btn edit-list"  data-list='@json($list)'></i>
@@ -183,8 +192,41 @@
                 });
             });
 
-            
+            $('.todolist-checkbox').on('change', function(){
+                let checkbox = $(this);
+                var list_id = checkbox.data('list-id');
+                var isChecked = checkbox.is(':checked') ? 'Y' : 'N';
 
+                $.ajax({
+                    url: '/edit-list/' + list_id,
+                    method: 'PUT',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    data: {
+                        'is_completed': isChecked
+                    },
+                    success: function(res) {
+                        console.log(res.success);
+                        if (res.success) {
+                            let label = $('label[data-list-id="' + list_id + '"]');
+                            console.log(label);
+                            console.log('List ID:', list_id);
+
+                            if (label.hasClass('overline_text')) {
+                                label.removeClass('overline_text');
+                            } else {
+                                label.addClass('overline_text');
+                            }
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+
+            });
+            
             function submitAjax(url, method, data){
                 $.ajax({
                     url: url,

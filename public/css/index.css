@@ -42,3 +42,11 @@ body{
 .crud-btn{
     cursor: pointer;
 }
+
+.font-11{
+    font-size: 8pt;
+}
+
+.overline_text{
+    text-decoration: line-through;
+}

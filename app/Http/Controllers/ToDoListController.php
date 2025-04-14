@@ -40,23 +40,37 @@ class ToDoListController extends Controller
 
     public function edit(ToDoList $list, Request $request){
         $title = 'Edit';
-        $required = $request->validate([
-            'title' => 'required',
-            'desc' => 'required',
-            'due_date' => 'required',
-        ]);
-
-        $update_list = $list->update([
-            'title' => $request->title,
-            'desc' => $request->desc,
-            'due_date' => $request->due_date,
-        ]);
-
         $status = false;
         $msg = 'Update Unsuccessfull!';
-        if($update_list){
-            $status = true;
-            $msg = 'Updated Successfully!';
+
+        if ($request->ajax()) {
+            if ($request->has('is_completed')) {
+                $data['is_completed'] = $request->is_completed;
+            }
+
+            $updated = $list->update($data);
+            if($updated){
+                $status = true;
+                $msg = 'Successfull!';
+            }
+        }else{
+            $required = $request->validate([
+                'title' => 'required',
+                'desc' => 'required',
+                'due_date' => 'required',
+            ]);
+    
+            $update_list = $list->update([
+                'title' => $request->title,
+                'desc' => $request->desc,
+                'due_date' => $request->due_date,
+            ]);
+    
+        
+            if($update_list){
+                $status = true;
+                $msg = 'Updated Successfully!';
+            }
         }
 
         return response()->json([
