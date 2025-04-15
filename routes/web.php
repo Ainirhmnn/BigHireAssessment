@@ -16,7 +16,9 @@ use App\Http\Controllers\ToDoListController;
 */
 
 Route::get('/', function () {
-    $lists = ToDoList::where('status', 'A')->get();
+    $lists = ToDoList::where('status', 'A')
+            ->orderBy('id', 'desc')
+            ->get();
     return view('index', ['lists' => $lists]);
 });
 
