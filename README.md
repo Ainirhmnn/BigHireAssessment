@@ -11,6 +11,7 @@ Requirements
 Steps to Run 
 - Clone the project to your local environment (Visual Studio Code) in C:\xampp\htdocs
 - In terminal, run git clone https://github.com/Ainirhmnn/BigHireAssessment.git
+- To run in web browser, in terminal write this code "php artisan serve" and you can open the link
 
 Database (in http://localhost/phpmyadmin/ - need to run Apache & MySQL in XAMPP):
 - create new database name bigheroassessment
