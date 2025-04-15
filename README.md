@@ -3,18 +3,18 @@
 A simple PHP Laravel To-Do List with complete CRUD function using MySQL.
 
 Requirements
--> XAMPP 
--> Visual Studio Code 
--> Git (to clone the project)
+- XAMPP 
+- Visual Studio Code 
+- Git (to clone the project)
 
 
 Steps to Run 
--> Clone the project to your local environment (Visual Studio Code) in C:\xampp\htdocs
----> In terminal, run git clone https://github.com/Ainirhmnn/BigHireAssessment.git
+- Clone the project to your local environment (Visual Studio Code) in C:\xampp\htdocs
+- In terminal, run git clone https://github.com/Ainirhmnn/BigHireAssessment.git
 
 Database (in http://localhost/phpmyadmin/ - need to run Apache & MySQL in XAMPP):
--> create new database name bigheroassessment
--> select import and upload the todolist.sql
+- create new database name bigheroassessment
+- select import and upload the todolist.sql
 
 
 Contact
